@@ -14,8 +14,6 @@ if (isset($_SESSION['success'])) {
     <div class="success"><?= $success ?></div> <?php
 } ?>
 
-
-
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
