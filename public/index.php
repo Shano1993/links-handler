@@ -3,6 +3,7 @@
 use App\Controller\ErrorController;
 use App\Routing\AbstractRouter;
 use App\Routing\HomeRouter;
+use App\Routing\LinksRouter;
 use App\Routing\UserRouter;
 
 require __DIR__ . '/../includes.php';
@@ -17,6 +18,9 @@ switch ($page) {
         break;
     case 'user':
         UserRouter::route($method);
+        break;
+    case 'links':
+        LinksRouter::route($method);
         break;
     default:
         (new ErrorController())->error404($page);

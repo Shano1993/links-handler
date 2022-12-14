@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Exception;
+
 abstract class AbstractController
 {
     /**
@@ -58,5 +60,37 @@ abstract class AbstractController
     public static function userConnected(): bool
     {
         return isset($_SESSION['user']) && null !== ($_SESSION['user'])->getId();
+    }
+
+    /**
+     * @param string $randomName
+     * @return string
+     * @throws Exception
+     */
+    public static function getRandomName(string $randomName): string
+    {
+        $infos = pathinfo($randomName);
+        try {
+            $bytes = random_bytes(20);
+        }
+        catch (Exception $exception) {
+            $bytes = openssl_random_pseudo_bytes(20);
+        }
+        return bin2hex($bytes) . '.' . $infos['extension'];
+    }
+
+    /**
+     * @param $tmpname
+     * @return bool
+     */
+    public static function checkImageMime($tmpname): bool
+    {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mtype = finfo_file($finfo, $tmpname);
+        if (strpos($mtype, 'image/') === 0) {
+            return true;
+        }
+        finfo_close($finfo);
+        return false;
     }
 }

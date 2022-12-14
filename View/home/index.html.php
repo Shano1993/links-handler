@@ -18,7 +18,17 @@ use App\Controller\AbstractController;
 <?php
     if (AbstractController::userConnected()) { ?>
         <div class="links">
-            <a href=""> + Ajouter un lien</a>
+            <form action="/index.php?c=links&a=add-links" method="post" id="addLink" enctype="multipart/form-data">
+                <div class="inputUser">
+                    <label for="link"></label>
+                    <input type="text" name="link" id="link" placeholder="Ajouter le lien">
+                </div>
+                <div class="inputUser">
+                    <label for="imageName"></label>
+                    <input type="file" name="imageName" id="file">
+                </div>
+                <input type="submit" name="save" value="Ajouter" id="submitLink">
+            </form>
         </div> <?php
     }
     else { ?>
