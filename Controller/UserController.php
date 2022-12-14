@@ -62,6 +62,37 @@ class UserController extends AbstractController
 
     public function login()
     {
+        if (self::userConnected()) {
+            header('location: /index.php?c=home');
+        }
+        if ($this->isFormSubmitted()) {
+            $email = $this->sanitizeString($this->getField('email'));
+            $password = $this->getField('password');
+
+            $user = UserManager::getUserByMail($email);
+            if (null === $user) {
+                header('location: /index.php?c=home');
+            }
+            else {
+                if (password_verify($password, $user->getPassword())) {
+                    $user->setPassword('');
+                    $_SESSION['user'] = $user;
+                    header('location: /index.php?c=home');
+                }
+            }
+        }
         $this->render('user/login');
+    }
+
+    public function logout()
+    {
+        if (!self::userConnected()) {
+            header('location: /index.php?c=home');
+        }
+        else {
+            $_SESSION['user'] = null;
+            session_destroy();
+        }
+        $this->index();
     }
 }

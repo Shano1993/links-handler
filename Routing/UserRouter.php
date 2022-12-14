@@ -20,6 +20,9 @@ class UserRouter extends AbstractRouter
             case 'login':
                 $controller->login();
                 break;
+            case 'logout':
+                $controller->logout();
+                break;
             default:
                 (new ErrorController())->error404($action);
         }

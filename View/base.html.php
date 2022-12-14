@@ -1,3 +1,9 @@
+<?php
+
+use App\Controller\AbstractController;
+
+?>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -9,10 +15,19 @@
 </head>
 <body>
 
+
+
 <header>
     <div>
-        <a href="/index.php?c=user&a=login" id="login">Connexion</a>
-        <a href="/index.php?c=user&a=register" id="inscription">Inscription</a>
+        <a href="/index.php?c=home" id="title">Links Handler</a> <?php
+        if (!AbstractController::userConnected()) { ?>
+            <a href="/index.php?c=user&a=login" id="login">Connexion</a>
+            <a href="/index.php?c=user&a=register" id="inscription">Inscription</a> <?php
+        }
+        else { ?>
+            <a href="/index.php?c=user&a=profile" id="profile"><?= $_SESSION['user']->getUsername() ?></a>
+            <a href="/index.php?c=user&a=logout" id="logout">Deconnexion</a> <?php
+        } ?>
     </div>
 </header>
 

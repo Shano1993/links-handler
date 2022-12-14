@@ -33,12 +33,12 @@ a {
     border-bottom: 0.1rem solid rgba(0, 0, 0, 0.18);
 }
 
-#login {
+#login, #profile {
     border-radius: 0.5rem;
     background-color: rgba(255, 0, 0, 0.37);
 }
 
-#inscription {
+#inscription, #logout {
     border-radius: 0.5rem;
     background-color: rgba(0, 81, 255, 0.38);
 }
@@ -56,4 +56,11 @@ a {
     flex-direction: column;
     font-size: 2rem;
     padding: 1rem 0;
+}
+
+#title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    border: none;
+    color: rgba(255, 0, 0, 0.77);
 }

@@ -1,3 +1,9 @@
+<?php
+
+use App\Controller\AbstractController;
+
+?>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -9,9 +15,17 @@
 </head>
 <body>
 
-<div class="links">
-    <a href=""> + Ajouter un lien</a>
-</div>
+<?php
+    if (AbstractController::userConnected()) { ?>
+        <div class="links">
+            <a href=""> + Ajouter un lien</a>
+        </div> <?php
+    }
+    else { ?>
+        <div class="links">
+            <a href="/index.php?c=user&a=login">Veuillez vous connecter pour utiliser l'application</a>
+        </div> <?php
+    }?>
 
 </body>
 </html>
