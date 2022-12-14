@@ -7,6 +7,10 @@ use App\Controller\HomeController;
 
 class HomeRouter extends AbstractRouter
 {
+    /**
+     * @param string|null $action
+     * @return void
+     */
     public static function route(?string $action = null)
     {
         $controller = new HomeController();

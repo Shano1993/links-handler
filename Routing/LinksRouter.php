@@ -7,6 +7,11 @@ use App\Controller\LinksController;
 
 class LinksRouter extends AbstractRouter
 {
+    /**
+     * @param string|null $action
+     * @return void
+     * @throws \Exception
+     */
     public static function route(?string $action = null)
     {
         $controller = new LinksController();
@@ -16,6 +21,9 @@ class LinksRouter extends AbstractRouter
                 break;
             case 'add-links':
                 $controller->addLinks('links/');
+                break;
+            case 'delete-links':
+                self::routeWithParams($controller, 'deleteLinks', ['id' => 'int']);
                 break;
             default:
                 (new ErrorController())->error404($action);

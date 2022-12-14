@@ -82,4 +82,26 @@ class UserManager
         $user->setId(DB::getPDO()->lastInsertId());
         return $result;
     }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public static function userExist(int $id): bool
+    {
+        $request = DB::getPDO()->query("SELECT count(*) as cnt FROM " . self::TABLE . " WHERE id = $id");
+        return $request ? $request->fetch()['cnt'] : 0;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public static function deleteAccount(User $user): bool
+    {
+        if (self::userExist($user->getId())) {
+            return DB::getPDO()->exec("DELETE FROM " . self::TABLE . " WHERE id = {$user->getId()}");
+        }
+        return false;
+    }
 }

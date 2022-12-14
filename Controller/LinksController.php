@@ -7,11 +7,19 @@ use App\Model\Manager\LinksManager;
 
 class LinksController extends AbstractController
 {
+    /**
+     * @return void
+     */
     public function index()
     {
         $this->render('home/index');
     }
 
+    /**
+     * @param $directory
+     * @return void
+     * @throws \Exception
+     */
     public function addLinks($directory)
     {
         if (!UserController::userConnected()) {
@@ -32,12 +40,14 @@ class LinksController extends AbstractController
                         if (AbstractController::checkImageMime($tmp_name)) {
                             if (move_uploaded_file($tmp_name, $directory . $name)) {
                                 $linksName = $this->sanitizeString($this->getField('link'));
+                                $linksTitle = $this->sanitizeString($this->getField('titleLink'));
                                 $linksUser = $_SESSION['user'];
 
                                 $links = new Links();
                                 $links
                                     ->setLinksImage($name)
                                     ->setLinksName($linksName)
+                                    ->setTitleLinks($linksTitle)
                                     ->setLinksUser($linksUser)
                                     ;
                                 if (LinksManager::addNewLinks($links)) {
@@ -47,24 +57,42 @@ class LinksController extends AbstractController
                         }
                         else {
                             $this->render('home/index'); ?>
-                            <div>Pas une image</div> <?php
+                            <div>Le fichier uploadé n'est pas une image</div> <?php
                         }
                     }
                     else {
                         $this->render('home/index'); ?>
-                        <div>Trop gros</div> <?php
+                        <div>Le fichier est trop volumineux</div> <?php
                     }
                 }
                 else {
                     $this->render('home/index'); ?>
-                    <div>Mauvais format</div> <?php
+                    <div>Mauvais format d'image</div> <?php
                 }
             }
             else {
                 $this->render('home/index'); ?>
-                <div>Erreur</div> <?php
+                <div>Une erreur c'est produite</div> <?php
             }
         }
-        $this->render('home/index');
+        header('location: /index.php?c=home');
+        exit();
+    }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function deleteLinks(int $id)
+    {
+        if (!UserController::userConnected()) {
+            header('location: /index.php?c=home');
+            exit();
+        }
+        if (LinksManager::linksExist($id)) {
+            $links = LinksManager::getLinks($id);
+            $delete = LinksManager::deleteLinks($links);
+        }
+        header('location: /index.php?c=home');
     }
 }

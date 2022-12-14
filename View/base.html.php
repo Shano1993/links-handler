@@ -2,7 +2,19 @@
 
 use App\Controller\AbstractController;
 
-?>
+if (isset($_SESSION['errors'])) {
+    $errors = $_SESSION['errors'];
+    unset($_SESSION['errors']); ?>
+    <div class="error"><?= $errors ?></div> <?php
+}
+
+if (isset($_SESSION['success'])) {
+    $success = $_SESSION['success'];
+    unset($_SESSION['success']); ?>
+    <div class="success"><?= $success ?></div> <?php
+} ?>
+
+
 
 <html lang="fr">
 <head>
@@ -15,11 +27,9 @@ use App\Controller\AbstractController;
 </head>
 <body>
 
-
-
 <header>
     <div>
-        <a href="/index.php?c=home" id="title">Links Handler</a> <?php
+        <h1 id="title">Links Handler</h1> <?php
         if (!AbstractController::userConnected()) { ?>
             <a href="/index.php?c=user&a=login" id="login">Connexion</a>
             <a href="/index.php?c=user&a=register" id="inscription">Inscription</a> <?php
@@ -32,10 +42,6 @@ use App\Controller\AbstractController;
 </header>
 
 <p><?= $html ?></p>
-
-<div id="container">
-
-</div>
 
 <script src="/build/js/front-bundle.js"></script>
 </body>

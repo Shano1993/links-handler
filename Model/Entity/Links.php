@@ -6,6 +6,7 @@ class Links extends AbstractEntity
 {
     private string $linksName;
     private string $linksImage;
+    private string $titleLinks;
     private User $linksUser;
 
     /**
@@ -41,6 +42,24 @@ class Links extends AbstractEntity
     public function setLinksImage(string $linksImage): self
     {
         $this->linksImage = $linksImage;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleLinks(): string
+    {
+        return $this->titleLinks;
+    }
+
+    /**
+     * @param string $titleLinks
+     * @return Links
+     */
+    public function setTitleLinks(string $titleLinks): self
+    {
+        $this->titleLinks = $titleLinks;
         return $this;
     }
 

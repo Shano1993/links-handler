@@ -8,11 +8,17 @@ use App\Routing\AbstractRouter;
 
 class UserController extends AbstractController
 {
+    /**
+     * @return void
+     */
     public function index()
     {
         $this->render('home/index');
     }
 
+    /**
+     * @return void
+     */
     public function register()
     {
         if (AbstractController::userConnected()) {
@@ -26,18 +32,26 @@ class UserController extends AbstractController
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['errors'] = "L'adresse email n'est pas au bon format.";
+                $this->render('home/index');
+                exit();
             }
 
             if (strlen($username) <= 2 || strlen($username) >= 45) {
                 $_SESSION['errors'] = "Le pseudo doit contenir entre 2 et 45 caractères.";
+                $this->render('home/index');
+                exit();
             }
 
             if ($password !== $passwordRepeat) {
                 $_SESSION['errors'] = "Les mots de passe ne correspondent pas.";
+                $this->render('home/index');
+                exit();
             }
 
             if (!preg_match('/^(?=.*[!@#$%^&*-\])(?=.*[0-9])(?=.*[A-Z]).{8,20}$/', $password)) {
                 $_SESSION['errors'] = "Le mot de passe doit contenir une majuscule, un chiffre et un caractère special.";
+                $this->render('home/index');
+                exit();
             }
 
             else {
@@ -60,6 +74,9 @@ class UserController extends AbstractController
         $this->render('user/register');
     }
 
+    /**
+     * @return void
+     */
     public function login()
     {
         if (self::userConnected()) {
@@ -71,6 +88,7 @@ class UserController extends AbstractController
 
             $user = UserManager::getUserByMail($email);
             if (null === $user) {
+                $_SESSION['errors'] = "L'adresse email est incorrect !";
                 header('location: /index.php?c=home');
             }
             else {
@@ -78,12 +96,19 @@ class UserController extends AbstractController
                     $user->setPassword('');
                     $_SESSION['user'] = $user;
                     header('location: /index.php?c=home');
+                    $_SESSION['success'] = "Connexion réussie";
+                }
+                else {
+                    $_SESSION['errors'] = "Le mot de passe ne correspond pas.";
                 }
             }
         }
         $this->render('user/login');
     }
 
+    /**
+     * @return void
+     */
     public function logout()
     {
         if (!self::userConnected()) {
@@ -94,5 +119,30 @@ class UserController extends AbstractController
             session_destroy();
         }
         $this->index();
+    }
+
+    /**
+     * @return void
+     */
+    public function profile() {
+        if (self::userConnected()) {
+            $this->render('user/profile');
+        }
+        else {
+            $this->render('home/index');
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function deleteAccount(int $id)
+    {
+        if (UserManager::userExist($id)) {
+            UserManager::deleteAccount($_SESSION['user']);
+            $_SESSION['user'] = null;
+        }
+        header('location: /index.php?c=home');
     }
 }
